@@ -1,0 +1,18 @@
+target_default: none
+
+packages:
+  - scipiper
+
+
+targets:
+  none:
+    depends:
+
+  #### 1_spatial ####
+
+  1_crosswalk_fetch/out/canonical_lakes_sf.rds:
+    command: gd_get('1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind')
+
+  1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds:
+    command: gd_get('1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds.ind')
+

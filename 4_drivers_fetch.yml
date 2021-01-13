@@ -1,0 +1,98 @@
+target_default: 4_drivers_fetch
+
+packages:
+  - sp
+  - scipiper
+  - dplyr
+  - ncdf4
+  - sf
+  - stringr
+  - doMC
+  - yaml
+
+sources:
+  - 4_drivers_fetch/src/nldas_cube_utils.R
+  - 4_drivers_fetch/src/nldas_feather_utils.R
+  - 4_drivers_fetch/src/grid_utils.R
+
+targets:
+  4_drivers_fetch:
+    depends:
+      - "4_drivers_fetch/log/nc/4_fetch_new_cubes_tasks.ind"
+      - "4_drivers_fetch/log/feather/4_fetch_new_cell_tasks.ind"
+
+  replete_time_range:
+    command: c(t0=I(0), t1 = I(367700)) # for doing one timechunk: 24999
+
+  nccopy_time_stride:
+    command: c(I(10000))
+
+  cube_data_dir:
+    command: c(I("4_drivers_fetch/out/nc"))
+
+  cube_ind_dir:
+    command: c(I("4_drivers_fetch/log/nc"))
+
+  cell_data_dir:
+    command: c(I("/Volumes/ThunderBlade/NLDAS_feather/"))
+
+  cell_ind_dir:
+    command: c(I("4_drivers_fetch/log/feather"))
+
+
+  new_feature_centroids:
+    command: readRDS("2_crosswalk_munge/out/centroid_lakes_sf.rds")
+
+  NLDAS_grid: # info from OPeNDAP: https://hydro1.gesdisc.eosdis.nasa.gov/dods/NLDAS_FORA0125_H.002
+    command: create_ldas_grid(x0 = I(-124.9375), y0 = I(25.0625), x_num = I(464), y_num = I(224), cell_res = I(0.125))
+
+  old_feature_NLDAS_cells:
+    command: cells_containing_points(NLDAS_grid, old_feature_centroids)
+
+  #feature_NLDAS_cells:
+  #  command: cells_containing_points_within(NLDAS_grid, new_feature_centroids, x_range = I(c(202,335)), y_range = I(c(127, 191)))
+  # figure out what to adjust with `st_bbox(filter(NLDAS_grid, y > 191 & y < 200, x > 220 & x < 260))`
+  feature_NLDAS_cells:
+    command: cells_all(NLDAS_grid, x_range = I(c(232, 288)), y_range = I(c(86, 128))) # was c(127,154) and c(155, 191) had to do this in two chunks do to memory issues I(c(166,201)), y_range = I(c(144,191))
+
+  old_nldas_cells:
+    command: as_OPeNDAP_cells(feature_NLDAS_cells, variables=I(c('dlwrfsfc','pressfc','apcpsfc','vgrd10m','ugrd10m','dswrfsfc','spfh2m','tmp2m'))) # switch back to old_feature_NLDAS_cells
+
+  nldas_cells:
+    command: as_OPeNDAP_cells(feature_NLDAS_cells, variables=I(c('dlwrfsfc','pressfc','apcpsfc','vgrd10m','ugrd10m','dswrfsfc','spfh2m','tmp2m')))
+
+  nldas_empty_box: # this is the domain that will require a FULL data pull in the time dimension
+    command: nldas_diff_box(old_nldas_cells, '4_drivers_fetch/in/nldas_cells.rds')
+
+  nldas_partial_box:
+    command: nldas_update_box(old_nldas_cells, nldas_empty_box) # this is the domain that will require a PARTIAL time pull, where partial time could be 0 (complete)
+
+  nldas_new_cube_files:
+    command: calc_nldas_files(nldas_empty_box, replete_time_range, nccopy_time_stride, nc_dir = cube_data_dir)
+
+  nldas_new_cells:
+    command: nldas_diff_cells(nldas_cells, '4_drivers_fetch/in/nldas_cells.rds')
+
+  nldas_new_cube_plan:
+    command: create_cube_task_plan(nldas_new_cube_files, max_steps = I(50), skip_on_exists = TRUE)
+
+  "4_fetch_new_cubes_tasks.yml":
+    command: create_cube_task_makefile(target_name, nldas_new_cube_plan)
+
+  "4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind":
+    command: loop_tasks(
+      task_plan = nldas_new_cube_plan,
+      task_makefile = "4_fetch_new_cubes_tasks.yml")
+
+  new_cell_plan:
+    command: create_new_cell_task_plan(nldas_new_cells, replete_time_range, cube_files_ind = "4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind",
+      cell_data_dir = cell_data_dir, cell_ind_dir = cell_ind_dir)
+
+  "4_fetch_new_cell_tasks.yml":
+    command: create_cell_task_makefile(target_name, new_cell_plan)
+
+  "4_drivers_fetch/log/feather/4_fetch_new_cell_tasks.ind":
+    command: scmake(I("4_fetch_new_cell_tasks.ind_promise"), remake_file = "4_fetch_new_cell_tasks.yml")
+    depends:
+      - 4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind
+

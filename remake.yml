@@ -1,0 +1,15 @@
+target_default: everything
+
+include:
+  - 1_crosswalk_fetch.yml
+  - 2_crosswalk_munge.yml
+  - 3_wqp_fetch.yml
+
+targets:
+  everything:
+    depends:
+      - 1_crosswalk_fetch
+      - 3_wqp_fetch
+
+
+

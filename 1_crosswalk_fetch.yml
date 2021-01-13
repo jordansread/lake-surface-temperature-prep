@@ -1,0 +1,51 @@
+target_default: 1_crosswalk_fetch
+
+packages:
+  - dplyr
+  - scipiper
+  - dataRetrieval
+  - sf
+  - httr
+  - sbtools
+  - smoothr
+
+sources:
+  - 1_crosswalk_fetch/src/fetch_nhdhr.R
+  - 1_crosswalk_fetch/src/fetch_wqp_sites.R
+
+targets:
+  1_crosswalk_fetch:
+    depends:
+      - 1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind
+      - 1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds.ind
+
+  wqp_temperature_charnames:
+    command: c(I(c(
+      "Temperature",
+      "Temperature, sample",
+      "Temperature, water",
+      "Temperature, water, deg F")))
+
+ #https://www.waterqualitydata.us/portal/#siteType=Lake%2C%20Reservoir%2C%20Impoundment&characteristicName=Depth%2C%20Secchi%20disk%20depth&characteristicName=Water%20transparency%2C%20Secchi%20disc&characteristicName=Depth%2C%20Secchi%20disk%20depth%20(choice%20list)&characteristicName=Secchi%20Reading%20Condition%20(choice%20list)&mimeType=tsv
+  nhd_HR_download_plan:
+    command: create_nhd_HR_download_plan(I(c("Alabama", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
+      "District_of_Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+      "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska",
+      "Nevada", "New_Hampshire", "New_Jersey", "New_Mexico", "New_York", "North_Carolina", "North_Dakota", "Ohio", "Oklahoma",
+      "Oregon", "Pennsylvania", "Rhode_Island", "South_Carolina", "South_Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
+      "Washington", "West_Virginia", "Wisconsin", "Wyoming")),
+      min_size = 40000, d_tolerance = 7)
+
+  1_crosswalk_fetch_nhd_tasks.yml:
+    command: create_nhd_HR_download_makefile(target_name, nhd_HR_download_plan,
+      final_targets = I(c('1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind',
+      '2_crosswalk_munge/out/gnisname_nhdhr_xwalk.rds.ind')))
+
+  1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind:
+    command: loop_tasks(nhd_HR_download_plan, '1_crosswalk_fetch_nhd_tasks.yml')
+
+  1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds.ind:
+    command: fetch_wqp_sites(target_name, characteristicName = wqp_temperature_charnames,
+      sf_ind = '1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind',
+      box_res = 5, dummy = I('2021-01-13'),
+      '1_crosswalk_fetch/src/fetch_wqp_sites.R')
