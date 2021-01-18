@@ -4,6 +4,7 @@ packages:
   - dplyr
   - scipiper
   - dataRetrieval
+  - stringr
   - sf
   - httr
   - sbtools
@@ -27,12 +28,13 @@ targets:
       "Temperature, water, deg F")))
 
  #https://www.waterqualitydata.us/portal/#siteType=Lake%2C%20Reservoir%2C%20Impoundment&characteristicName=Depth%2C%20Secchi%20disk%20depth&characteristicName=Water%20transparency%2C%20Secchi%20disc&characteristicName=Depth%2C%20Secchi%20disk%20depth%20(choice%20list)&characteristicName=Secchi%20Reading%20Condition%20(choice%20list)&mimeType=tsv
+#"Idaho", #"Texas", #"Indiana", #"Oregon",
   nhd_HR_download_plan:
     command: create_nhd_HR_download_plan(I(c("Alabama", "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
-      "District_of_Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+      "District_of_Columbia", "Florida", "Georgia", "Hawaii", "Illinois", "Iowa", "Kansas", "Kentucky",
       "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska",
       "Nevada", "New_Hampshire", "New_Jersey", "New_Mexico", "New_York", "North_Carolina", "North_Dakota", "Ohio", "Oklahoma",
-      "Oregon", "Pennsylvania", "Rhode_Island", "South_Carolina", "South_Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
+      "Pennsylvania", "Rhode_Island", "South_Carolina", "South_Dakota", "Tennessee", "Utah", "Vermont", "Virginia",
       "Washington", "West_Virginia", "Wisconsin", "Wyoming")),
       min_size = 40000, d_tolerance = 7)
 
