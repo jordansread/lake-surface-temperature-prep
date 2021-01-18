@@ -94,8 +94,9 @@ combine_nc_files <- function(filepaths_to_combine, nc_out_filepath){
 #' fault tolerate OPeNDAP request
 nccopy_retry <- function(url, file_out, retries = 15, verbose = FALSE, snooze = 5, variable){
   retry <- 0
+
   while (retry < retries){
-    output <- system(sprintf("nccopy -m 15m %s %s", url, file_out), ignore.stdout = TRUE, ignore.stderr = TRUE)
+    output <- system(sprintf("nccopy -m 15m -d9 %s %s", url, file_out), ignore.stdout = TRUE, ignore.stderr = TRUE)
     if(output || file.size(file_out) == 0){
       unlink(file_out)
       retry <- retry + 1

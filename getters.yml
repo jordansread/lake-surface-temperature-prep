@@ -16,3 +16,11 @@ targets:
   1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds:
     command: gd_get('1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds.ind')
 
+  2_crosswalk_munge/out/wqptemp_nhdhr_xwalk.rds:
+    command: gd_get('2_crosswalk_munge/out/wqptemp_nhdhr_xwalk.rds.ind')
+
+  2_crosswalk_munge/out/centroid_lakes_sf.rds:
+    command: gd_get('2_crosswalk_munge/out/centroid_lakes_sf.rds.ind')
+
+  3_wqp_fetch/out/wqp_temperature_data.rds:
+    command: gd_get('3_wqp_fetch/out/wqp_temperature_data.rds.ind')

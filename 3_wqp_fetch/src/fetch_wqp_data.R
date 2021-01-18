@@ -38,6 +38,7 @@ fetch_wqp_data <- function(out_ind, characteristicName, site_ind, dummy, ..., ma
     arrange(task_num)
 
   wqp_site_file <- paste0(pull_type, '_site_table.rds') %>% file.path(data_tmp_dir, .)
+
   saveRDS(wqp_site_table, file = wqp_site_file)
   tasks <- wqp_site_table %>% pull(task_name) %>% unique()
 
@@ -74,7 +75,7 @@ fetch_wqp_data <- function(out_ind, characteristicName, site_ind, dummy, ..., ma
   create_task_makefile(
     task_plan = task_plan,
     makefile = remakefile,
-    packages = c('dataRetrieval', 'dplyr', 'httr'),
+    packages = c('dataRetrieval', 'dplyr', 'httr', 'readr'),
     sources = sources,
     final_targets = target_name,
     finalize_funs = 'bind_write_rds',
@@ -111,7 +112,7 @@ wqp_POST <- function(wqp_args_list){
   unlink(download_location)
 
   dat_out <- suppressWarnings(
-    read_delim(
+    readr::read_delim(
       unzipped_filename,
       col_types = cols(`ActivityStartTime/Time` = col_character(),
                        `ActivityEndTime/Time` = col_character(),

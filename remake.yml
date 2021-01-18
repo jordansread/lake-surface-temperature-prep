@@ -4,12 +4,14 @@ include:
   - 1_crosswalk_fetch.yml
   - 2_crosswalk_munge.yml
   - 3_wqp_fetch.yml
+  - 4_drivers_fetch.yml
 
 targets:
   everything:
     depends:
       - 1_crosswalk_fetch
       - 3_wqp_fetch
+      - 4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind
 
 
 
