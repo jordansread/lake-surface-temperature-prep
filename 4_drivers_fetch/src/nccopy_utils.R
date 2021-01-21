@@ -41,7 +41,7 @@ nccopy_split_combine <- function(nc_filepath, max_steps, skip_on_exists = FALSE)
     mutate(nc_temp_file_fixed = file.path(temp_nc_dir,
                                           sprintf("NLDAS_%s_fixed.nc", stringr::str_pad(file_num, width = 3, pad = '0'))))
 
-  registerDoMC(cores=4)
+  registerDoMC(cores=1)
   #for (split_file in split_file_metadata){
   foreach(split_file=split_file_metadata) %dopar% {
 

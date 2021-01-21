@@ -24,6 +24,14 @@ create_ldas_grid <- function(x0, y0, x_num, y_num, cell_res){
 }
 
 
+fetch_read_centroids <- function(indfile){
+  readRDS(sc_retrieve(indfile))
+}
+
+filter_centroids_wqp <- function(centroids, wqp_ind){
+  wqp_site_ids <- sc_retrieve(wqp_ind) %>% readRDS() %>% pull(site_id)
+  centroids %>% filter(site_id %in% wqp_site_ids)
+}
 
 #' get the x and y indices of cells that contain points
 #'

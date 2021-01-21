@@ -6,9 +6,6 @@ cell_list_to_df <- function(cells_list){
              stringsAsFactors = FALSE)
 }
 
-fetch_read_centroids <- function(indfile){
-  readRDS(sc_retrieve(indfile))
-}
 
 #' returns the spatial box and variable names for the cells that are need full/clean data
 nldas_diff_box <- function(new_cells_list, old_cells_df_filename){
