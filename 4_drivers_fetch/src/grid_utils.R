@@ -48,6 +48,19 @@ cells_containing_points <- function(cell_grid, points){
   return(cells_w_pts)
 }
 
+feature_cell_indices <- function(cell_grid, points){
+
+  # filter points that are outside of the grid
+  within_grid <- st_within(points, cell_grid) %>% lengths() %>% {. > 0}
+  points <- points[within_grid, ]
+
+  dplyr::do(points, data.frame(match_collection = st_intersects(cell_grid, st_geometry(.), sparse = FALSE))) %>%
+    mutate_all(which) %>% summarise_all(unique) %>%
+    tidyr::gather(key = cent_idx, value = grid_idx) %>%
+    mutate(x = cell_grid[grid_idx,]$x, y = cell_grid[grid_idx,]$y) %>%
+    mutate(site_id = points$site_id) %>% select(site_id, x, y)
+}
+
 cells_containing_points_within <- function(cell_grid, points, x_range, y_range){
   cells_containing_points(cell_grid, points) %>%
     dplyr::filter(x_range[1] <= x & x <= x_range[2], y_range[1] <= y & y <= y_range[2])

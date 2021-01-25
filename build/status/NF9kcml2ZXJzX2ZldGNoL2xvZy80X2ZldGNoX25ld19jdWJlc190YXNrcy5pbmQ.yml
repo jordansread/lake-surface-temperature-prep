@@ -1,0 +1,12 @@
+version: 0.3.0
+name: 4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind
+type: file
+hash: c1901d225000005eea1a460c383f1938
+time: 2021-01-23 23:46:31 UTC
+depends:
+  nldas_new_cube_plan: d473fec5344d06eb2375c200e9c742be
+  4_fetch_new_cubes_tasks.yml: 73df892f61dbe7d7dfbc10ed902c7bc8
+fixed: ~
+code:
+  functions: {}
+

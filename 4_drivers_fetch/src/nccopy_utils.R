@@ -41,7 +41,7 @@ nccopy_split_combine <- function(nc_filepath, max_steps, skip_on_exists = FALSE)
     mutate(nc_temp_file_fixed = file.path(temp_nc_dir,
                                           sprintf("NLDAS_%s_fixed.nc", stringr::str_pad(file_num, width = 3, pad = '0'))))
 
-  registerDoMC(cores=1)
+  registerDoMC(cores=4)
   #for (split_file in split_file_metadata){
   foreach(split_file=split_file_metadata) %dopar% {
 
@@ -49,6 +49,7 @@ nccopy_split_combine <- function(nc_filepath, max_steps, skip_on_exists = FALSE)
     nc_temp_file_unl <- split_file_info %>% filter(file_meta == split_file) %>% pull(nc_temp_file_unl)
 
     nldas_url <- nldas_url_from_file(split_file)
+
     nccopy_retry(nldas_url, nc_temp_file_fixed, variable = var)
 
     # make the time dimension unlimited so we can append to this file:
@@ -126,8 +127,9 @@ verify_nc_clean <- function(nc_filepath, variable){
   x_max <- length(ncvar_get(nc, 'lon'))
   # read all x, one y, one time:
   first_band <- ncvar_get(nc, varid = variable, start = c(1, 1, 1), count = c(-1, 1, 1))
+  # but starting on the edge, all first band is NA
   ncdf4::nc_close(nc)
-  if (all(first_band[seq(2, x_max, 2)] < 0) & all(first_band[seq(1, x_max, 2)] == 0)){
+  if (!all(is.na(first_band)) && all(first_band[seq(2, x_max, 2)] < 0) && all(first_band[seq(1, x_max, 2)] == 0)){
     return(FALSE)
   } else {
     return(TRUE)

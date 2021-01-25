@@ -42,20 +42,22 @@ fetch_NHD_as_sf <- function(url,min_size, d_tol){
     unlink(dl_dest)
   })
 
-  download.file(url, destfile = dl_dest, quiet = TRUE)
+  download.file(url, destfile = dl_dest, quiet = TRUE, method='curl')
   unzip(dl_dest, exdir = unzip_dir)
 
-  waterbodies_sf <- sf::read_sf(file.path(unzip_dir,paste0(tools::file_path_sans_ext(basename(url)), '.gdb')), layer = 'NHDWaterbody') %>%
-    filter(FType %in% c(390, 436, 361))  #select only lakes/ponds/reservoirs. This drops things like swamp/marsh
 
-  waterbodies_sf <- sf::st_transform(waterbodies_sf, crs = "+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs")
-  waterbodies_sf$area_m2 <- as.numeric(sf::st_area(waterbodies_sf))# in m2, stripping "units" class because I don't know how to filter against
-
-  waterbodies_sf %>%
+  sf::read_sf(file.path(unzip_dir,paste0(tools::file_path_sans_ext(basename(url)), '.gdb')), layer = 'NHDWaterbody') %>%
+    filter(FType %in% c(390, 436, 361)) %>% #select only lakes/ponds/reservoirs. This drops things like swamp/marsh
+    mutate(area_m2 = AreaSqKm * 1000000) %>%
     filter(area_m2 > min_size) %>%
     mutate(site_id = paste0('nhdhr_', Permanent_Identifier)) %>% dplyr::select(site_id, GNIS_Name) %>%  #geometry selected automatically
-    sf::st_simplify(preserveTopology = TRUE, dTolerance = d_tol) %>%
-    sf::st_transform(crs = 4326)
+    # bad Idaho site!
+    filter(site_id != 'nhdhr_{5BEDE13F-C94B-4501-B979-E00C29EA374B}') %>%
+    sf::st_transform(crs = 4326) %>%
+    sf::st_zm() %>%
+    sf::st_buffer(dist = 0) %>%
+    sf::st_simplify(preserveTopology = TRUE, dTolerance = d_tol)
+
 }
 
 GNIS_Name_xwalk <- function(ind_file, ...){

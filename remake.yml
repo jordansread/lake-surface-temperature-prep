@@ -11,7 +11,9 @@ targets:
     depends:
       - 1_crosswalk_fetch
       - 3_wqp_fetch
-      - 4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind
+      - 4_drivers_fetch/out/NLDAS_TMP2m_19790102-20210102_train_test.nc.ind
+      - 4_drivers_fetch/out/NLDAS_DLWRFsfc_19790102-20210102_train_test.nc.ind
+      - 4_drivers_fetch/out/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc.ind
 
 
 
