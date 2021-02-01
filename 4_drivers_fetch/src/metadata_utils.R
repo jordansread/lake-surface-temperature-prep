@@ -1,14 +1,23 @@
 
 
-create_metadata_file <- function(outfile, wqp_site_cell_indices, lakes_sf_ind){
+create_metadata_file <- function(outfile, wqp_site_cell_indices, lakes_sf_ind, wqp_data_fl){
 
-  lakes_sf <- sc_retrieve(lakes_sf_ind) %>% readRDS(lakes_sf_ind)
+  lakes_sf <- sc_retrieve(lakes_sf_ind) %>% readRDS()
+  wqp_data <- feather::read_feather(wqp_data_fl)
 
+  is_below <- function(filepath, size){
+    file.size(filepath) < size
+  }
+  'TMP2m DLWRFsfc DSWRFsfc UGRD10m VGRD10m'
   dropped_sites <- wqp_site_cell_indices %>%
-    mutate(datarod_fl = sprintf("/Volumes/ThunderBlade/NLDAS_datarods/NLDAS_DLWRFsfc_19790102-20210102_x[%s]_y[%s].txt", x, y), fl_size = file.size(datarod_fl)) %>%
-    filter(fl_size < 600) %>% pull(site_id)
+    mutate(TMP2m_datarod_fl = sprintf("/Volumes/ThunderBlade/NLDAS_datarods/NLDAS_TMP2m_19790102-20210102_x[%s]_y[%s].txt", x, y),# TMP2m_fl_size = file.size(TMP2m_datarod_fl),
+           DLWRFsfc_datarod_fl = sprintf("/Volumes/ThunderBlade/NLDAS_datarods/NLDAS_DLWRFsfc_19790102-20210102_x[%s]_y[%s].txt", x, y),# DLWRFsfc_fl_size = file.size(DLWRFsfc_datarod_fl),
+           DSWRFsfc_datarod_fl = sprintf("/Volumes/ThunderBlade/NLDAS_datarods/NLDAS_DSWRFsfc_19790102-20210102_x[%s]_y[%s].txt", x, y), #DSWRFsfc_fl_size = file.size(DSWRFsfc_datarod_fl),
+           UGRD10m_datarod_fl = sprintf("/Volumes/ThunderBlade/NLDAS_datarods/NLDAS_UGRD10m_19790102-20210102_x[%s]_y[%s].txt", x, y), #UGRD10m_fl_size = file.size(UGRD10m_datarod_fl),
+           VGRD10m_datarod_fl = sprintf("/Volumes/ThunderBlade/NLDAS_datarods/NLDAS_VGRD10m_19790102-20210102_x[%s]_y[%s].txt", x, y)) %>%  #VGRD10m_fl_size = file.size(VGRD10m_datarod_fl)) %>%
+    filter_at(vars(-site_id, -x, -y), any_vars(is_below(., 600))) %>% pull(site_id)
 
-  wqp_site_cell_indices <- wqp_site_cell_indices %>% filter(!site_id %in% dropped_sites)
+  wqp_site_cell_indices <- wqp_site_cell_indices %>% filter(!site_id %in% dropped_sites, site_id %in% wqp_data$site_id)
 
   # add lat/lon
   lakes_sf %>% inner_join(wqp_site_cell_indices) %>%

@@ -45,12 +45,11 @@ fetch_NHD_as_sf <- function(url,min_size, d_tol){
   download.file(url, destfile = dl_dest, quiet = TRUE, method='curl')
   unzip(dl_dest, exdir = unzip_dir)
 
-
   sf::read_sf(file.path(unzip_dir,paste0(tools::file_path_sans_ext(basename(url)), '.gdb')), layer = 'NHDWaterbody') %>%
     filter(FType %in% c(390, 436, 361)) %>% #select only lakes/ponds/reservoirs. This drops things like swamp/marsh
     mutate(area_m2 = AreaSqKm * 1000000) %>%
     filter(area_m2 > min_size) %>%
-    mutate(site_id = paste0('nhdhr_', Permanent_Identifier)) %>% dplyr::select(site_id, GNIS_Name) %>%  #geometry selected automatically
+    mutate(site_id = paste0('nhdhr_', Permanent_Identifier)) %>% dplyr::select(site_id, GNIS_Name, Elevation, FType, FCode) %>%  #geometry selected automatically
     # bad Idaho site!
     filter(site_id != 'nhdhr_{5BEDE13F-C94B-4501-B979-E00C29EA374B}') %>%
     sf::st_transform(crs = 4326) %>%
@@ -76,7 +75,7 @@ combine_nhd_sfs <- function(ind_file, ...){
 
   sf_lakes <- rbind(...)
   deduped_sf_lakes <- sf_lakes[!duplicated(sf_lakes$site_id), ] %>%
-    dplyr::select(site_id)
+    dplyr::select(site_id,  Elevation, FType, FCode)
 
   saveRDS(deduped_sf_lakes, data_file)
   gd_put(ind_file, data_file)
