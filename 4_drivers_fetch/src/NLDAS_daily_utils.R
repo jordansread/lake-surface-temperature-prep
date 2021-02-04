@@ -1,9 +1,4 @@
 
-get_yeardate <- function(indx){
-  get_datetime(indx) %>%
-    lubridate::floor_date() %>% format('%Y%m%d')
-}
-
 get_datetime <- function(indx){
   as.POSIXct('1979-01-01 13:00', tz = 'GMT') %>% seq(from = ., by = 'hours', length.out = indx+1) %>%
     tail(1)
