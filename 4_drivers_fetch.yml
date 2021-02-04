@@ -17,13 +17,14 @@ sources:
   - 4_drivers_fetch/src/grid_utils.R
   - 4_drivers_fetch/src/nldas_rod_utils.R
   - 4_drivers_fetch/src/metadata_utils.R
+  - 4_drivers_fetch/src/NLDAS_munge_nc.R
 
 targets:
   4_drivers_fetch:
     depends:
       #- 4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind
       #- 4_drivers_fetch/log/4_fetch_new_cell_tasks.ind
-      - 4_drivers_fetch/out/NLDAS_TMP2m_19790102-20210102_train_test.nc.ind
+      - 4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind
 
   replete_time_range:
     command: c(t0=I(0), t1 = I(367700)) # for doing one timechunk: 24999
@@ -76,50 +77,11 @@ targets:
   surface_lake_metadata_file.csv:
     command: create_metadata_file(target_name, wqp_site_cell_indices, '1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind', '5_temperature_munge/out/temp_wqp_munged.feather')
 
-  4_drivers_fetch/out/NLDAS_TMP2m_19790102-20210102_train_test.nc.ind:
-    command: NLDAS_datarod_tasks(target_name,
-      NLDAS_cells = wqp_feature_NLDAS_cells,
-      NLDAS_sf_grid = NLDAS_grid,
-      tmp_dir = rods_data_dir,
-      '4_drivers_fetch/src/nldas_rod_utils.R')
-
-  4_drivers_fetch/out/NLDAS_DLWRFsfc_19790102-20210102_train_test.nc.ind:
-    command: NLDAS_datarod_tasks(target_name,
-      NLDAS_cells = wqp_feature_NLDAS_cells,
-      NLDAS_sf_grid = NLDAS_grid,
-      tmp_dir = rods_data_dir,
-      '4_drivers_fetch/src/nldas_rod_utils.R')
-
-  4_drivers_fetch/out/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc.ind:
-    command: NLDAS_datarod_tasks(target_name,
-      NLDAS_cells = wqp_feature_NLDAS_cells,
-      NLDAS_sf_grid = NLDAS_grid,
-      tmp_dir = rods_data_dir,
-      '4_drivers_fetch/src/nldas_rod_utils.R')
-
-  4_drivers_fetch/out/NLDAS_UGRD10m_19790102-20210102_train_test.nc.ind:
-    command: NLDAS_datarod_tasks(target_name,
-      NLDAS_cells = wqp_feature_NLDAS_cells,
-      NLDAS_sf_grid = NLDAS_grid,
-      tmp_dir = rods_data_dir,
-      '4_drivers_fetch/src/nldas_rod_utils.R')
-
-  4_drivers_fetch/out/NLDAS_VGRD10m_19790102-20210102_train_test.nc.ind:
-    command: NLDAS_datarod_tasks(target_name,
-      NLDAS_cells = wqp_feature_NLDAS_cells,
-      NLDAS_sf_grid = NLDAS_grid,
-      tmp_dir = rods_data_dir,
-      '4_drivers_fetch/src/nldas_rod_utils.R')
-
-#,'pressfc','apcpsfc','vgrd10m','ugrd10m','spfh2m'))) 'dlwrfsfc','dswrfsfc',, 'dlwrfsfc','dswrfsfc',
   nldas_cells:
     command: as_OPeNDAP_cells(feature_NLDAS_cells, variables=I(c('tmp2m', 'dlwrfsfc','dswrfsfc','vgrd10m','ugrd10m')))
 
   nldas_empty_box: # this is the domain that will require a FULL data pull in the time dimension
     command: nldas_diff_box(nldas_cells, '4_drivers_fetch/in/nldas_cells.rds')
-
-  nldas_partial_box:
-    command: nldas_update_box(nldas_cells, nldas_empty_box) # this is the domain that will require a PARTIAL time pull, where partial time could be 0 (complete)
 
   nldas_new_cube_files:
     command: calc_nldas_files(nldas_empty_box, replete_time_range, nccopy_time_stride, nc_dir = cube_data_dir)
@@ -138,15 +100,10 @@ targets:
       task_plan = nldas_new_cube_plan,
       task_makefile = "4_fetch_new_cubes_tasks.yml")
 
-  new_cell_plan:
-    command: create_new_cell_task_plan(nldas_new_cells, replete_time_range, cube_files_ind = "4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind",
-      cell_data_dir = cell_data_dir, cell_ind_dir = cell_ind_dir)
-
-  "4_fetch_new_cell_tasks.yml":
-    command: create_cell_task_makefile(target_name, new_cell_plan)
-
-  "4_drivers_fetch/log/feather/4_fetch_new_cell_tasks.ind":
-    command: scmake(I("4_fetch_new_cell_tasks.ind_promise"), remake_file = "4_fetch_new_cell_tasks.yml")
-    depends:
-      - 4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind
+  "4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind":
+    command: NLDAS_hour2daily_tasks(target_name,
+      hash_fl = "4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind",
+      chunk_size = 5000,
+      out_dir = I('4_drivers_fetch/out'),
+      "4_drivers_fetch/src/NLDAS_daily_utils.R")
 
