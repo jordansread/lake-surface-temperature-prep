@@ -1,0 +1,13 @@
+version: 0.3.0
+name: 2_crosswalk_munge/out/buffered_lakes_sf.rds.ind
+type: file
+hash: 5937b162d1ade483e29fecc213f131f9
+time: 2021-02-08 20:37:10 UTC
+depends:
+  1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind: df25f66f74ae2006f4a42d3b7837211a
+  test_train_ids: 229690e8da447766686f9094ddb811e5
+fixed: 90a68d12c977d782266b6b1087137bdb
+code:
+  functions:
+    buffer_sf: 2e04c318904f329944998549c72adb69
+

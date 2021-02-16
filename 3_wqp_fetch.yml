@@ -1,0 +1,24 @@
+target_default: 3_wqp_fetch
+
+
+packages:
+  - dataRetrieval
+  - dplyr
+  - scipiper
+  - yaml
+  - MESS
+
+sources:
+  - 3_wqp_fetch/src/fetch_wqp_data.R
+
+targets:
+  3_wqp_fetch:
+    depends:
+      - 3_wqp_fetch/out/wqp_temperature_data.rds.ind
+
+
+  3_wqp_fetch/out/wqp_temperature_data.rds.ind:
+    command: fetch_wqp_data(target_name, characteristicName = wqp_temperature_charnames,
+      site_ind = '2_crosswalk_munge/out/wqptemp_nhdhr_xwalk.rds.ind',
+      dummy = I('2021-01-13'),
+     '3_wqp_fetch/src/fetch_wqp_data.R')

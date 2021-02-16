@@ -1,0 +1,15 @@
+version: 0.3.0
+name: 4_drivers_fetch/out/NLDAS_UGRD10m_19790102-20210102_train_test.nc.ind
+type: file
+hash: 3be9509efc5c04d473991d319bc1b1ae
+time: 2021-01-26 02:10:05 UTC
+depends:
+  wqp_feature_NLDAS_cells: 3b477d6aa7acadadeb414546d21d6c59
+  NLDAS_grid: c6120c6ee2a7916d8f6b3c1402c5a3fa
+  rods_data_dir: bbeee2a3012db93d5e96150369c001d3
+  4_drivers_fetch/src/nldas_rod_utils.R: c0f758e368a9c7fd01047cc2cead1bf2
+fixed: b8dc2b9f4f62695538403c7361f1a39e
+code:
+  functions:
+    NLDAS_datarod_tasks: 62c210f1efb98232c48a8761bdf83805
+

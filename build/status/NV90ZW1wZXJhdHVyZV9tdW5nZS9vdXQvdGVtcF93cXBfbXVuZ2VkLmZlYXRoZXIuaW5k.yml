@@ -1,0 +1,13 @@
+version: 0.3.0
+name: 5_temperature_munge/out/temp_wqp_munged.feather.ind
+type: file
+hash: 64c3b59da0e125d70ba9dcc9e6b48d11
+time: 2021-02-15 19:19:48 UTC
+depends:
+  3_wqp_fetch/out/wqp_temperature_data.rds.ind: fcecb1649cda18971a174fd470fed34f
+  2_crosswalk_munge/out/wqptemp_nhdhr_xwalk.rds.ind: 6ef41a13d1e902d076af499ef77ef213
+fixed: bec4019351ad9bd2ba0cad5363870a38
+code:
+  functions:
+    munge_wqp_temperature: a8947e2f30a19c45745a24fd741ac469
+

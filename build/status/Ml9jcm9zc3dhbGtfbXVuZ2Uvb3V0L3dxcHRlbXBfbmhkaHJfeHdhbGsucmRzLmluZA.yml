@@ -1,0 +1,13 @@
+version: 0.3.0
+name: 2_crosswalk_munge/out/wqptemp_nhdhr_xwalk.rds.ind
+type: file
+hash: 6ef41a13d1e902d076af499ef77ef213
+time: 2021-02-04 16:23:09 UTC
+depends:
+  1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind: df25f66f74ae2006f4a42d3b7837211a
+  1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds.ind: 24a680226a8040a0483cde02effe39e7
+fixed: eebeed3212cd3248f3d51eb73b35194f
+code:
+  functions:
+    crosswalk_points_in_poly: 2302dd689a4c996439d6e202ecbf7fb4
+
