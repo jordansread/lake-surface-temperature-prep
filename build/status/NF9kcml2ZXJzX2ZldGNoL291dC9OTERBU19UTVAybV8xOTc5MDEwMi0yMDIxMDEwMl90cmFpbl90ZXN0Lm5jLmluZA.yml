@@ -1,0 +1,15 @@
+version: 0.3.0
+name: 4_drivers_fetch/out/NLDAS_TMP2m_19790102-20210102_train_test.nc.ind
+type: file
+hash: e6d6c920cfdd2d0518bffef3612e921f
+time: 2021-01-22 04:58:22 UTC
+depends:
+  wqp_feature_NLDAS_cells: 3b477d6aa7acadadeb414546d21d6c59
+  NLDAS_grid: b66c89641f1be1cc50e9fb082355052c
+  rods_data_dir: bbeee2a3012db93d5e96150369c001d3
+  4_drivers_fetch/src/nldas_rod_utils.R: cd1de7188b01db64f65d2ba6959fb46a
+fixed: 0bb5e21d65507f0fd00956c275b620cb
+code:
+  functions:
+    NLDAS_datarod_tasks: 62c210f1efb98232c48a8761bdf83805
+

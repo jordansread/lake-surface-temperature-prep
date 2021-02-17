@@ -1,0 +1,109 @@
+target_default: 4_drivers_fetch
+
+packages:
+  - sp
+  - scipiper
+  - dplyr
+  - ncdf4
+  - readr
+  - sf
+  - stringr
+  - doMC
+  - yaml
+
+sources:
+  - 4_drivers_fetch/src/nldas_cube_utils.R
+  - 4_drivers_fetch/src/nldas_feather_utils.R
+  - 4_drivers_fetch/src/grid_utils.R
+  - 4_drivers_fetch/src/nldas_rod_utils.R
+  - 4_drivers_fetch/src/metadata_utils.R
+  - 4_drivers_fetch/src/NLDAS_munge_nc.R
+
+targets:
+  4_drivers_fetch:
+    depends:
+      #- 4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind
+      #- 4_drivers_fetch/log/4_fetch_new_cell_tasks.ind
+      - 4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind
+
+  replete_time_range:
+    command: c(t0=I(0), t1 = I(367700)) # for doing one timechunk: 24999
+
+  nccopy_time_stride:
+    command: c(I(25000))
+
+  cube_data_dir:
+    command: c(I("/Volumes/ThunderBlade/NLDAS_nc/"))
+
+  cube_ind_dir:
+    command: c(I("4_drivers_fetch/log/nc"))
+
+  rods_data_dir:
+    command: c(I("/Volumes/ThunderBlade/NLDAS_datarods/"))
+
+  cell_data_dir:
+    command: c(I("/Volumes/ThunderBlade/NLDAS_feather/"))
+
+  cell_ind_dir:
+    command: c(I("4_drivers_fetch/log/feather"))
+
+  NLDAS_grid: # info from OPeNDAP: https://hydro1.gesdisc.eosdis.nasa.gov/dods/NLDAS_FORA0125_H.002
+    command: create_ldas_grid(x0 = I(-124.9375), y0 = I(25.0625), x_num = I(464), y_num = I(224), cell_res = I(0.125))
+
+  #wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --auth-no-challenge=on --keep-session-cookies --content-disposition -i ~/Downloads/subset_NLDAS_FORA0125_H_002_20210117_124435.txt --directory-prefix=tmp
+  #feature_NLDAS_cells:
+  #  command: cells_containing_points_within(NLDAS_grid, new_feature_centroids, x_range = I(c(202,335)), y_range = I(c(127, 191)))
+  # figure out what to adjust with `st_bbox(filter(NLDAS_grid, y > 191 & y < 200, x > 220 & x < 260))`
+  #feature_NLDAS_cells:
+  #  command: cells_all(NLDAS_grid, x_range = I(c(100, 199)), y_range = I(c(0, 99))) # was c(127,154) and c(155, 191) had to do this in two chunks do to memory issues I(c(166,201)), y_range = I(c(144,191))
+
+  feature_centroids:
+    command: fetch_read_centroids("2_crosswalk_munge/out/centroid_lakes_sf.rds.ind")
+
+  wqp_centroids:
+    command: filter_centroids_wqp(feature_centroids,
+      wqp_ind = '2_crosswalk_munge/out/wqptemp_nhdhr_xwalk.rds.ind')
+
+  # dropped_sites <- wqp_site_cell_indices %>% mutate(datarod_fl = sprintf("/Volumes/ThunderBlade/NLDAS_datarods/NLDAS_DLWRFsfc_19790102-20210102_x[%s]_y[%s].txt", x, y), fl_size = file.size(datarod_fl)) %>% filter(fl_size < 600) %>% pull(site_id)
+  feature_NLDAS_cells:
+    command: cells_containing_points(NLDAS_grid, feature_centroids)
+
+  wqp_feature_NLDAS_cells:
+    command: cells_containing_points(NLDAS_grid, wqp_centroids)
+
+  wqp_site_cell_indices:
+    command: feature_cell_indices(NLDAS_grid, wqp_centroids)
+
+  surface_lake_metadata_file.csv:
+    command: create_metadata_file(target_name, wqp_site_cell_indices, '1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind', '5_temperature_munge/out/temp_wqp_munged.feather')
+
+  nldas_cells:
+    command: as_OPeNDAP_cells(feature_NLDAS_cells, variables=I(c('tmp2m', 'dlwrfsfc','dswrfsfc','vgrd10m','ugrd10m')))
+
+  nldas_empty_box: # this is the domain that will require a FULL data pull in the time dimension
+    command: nldas_diff_box(nldas_cells, '4_drivers_fetch/in/nldas_cells.rds')
+
+  nldas_new_cube_files:
+    command: calc_nldas_files(nldas_empty_box, replete_time_range, nccopy_time_stride, nc_dir = cube_data_dir)
+
+  nldas_new_cells:
+    command: nldas_diff_cells(nldas_cells, '4_drivers_fetch/in/nldas_cells.rds')
+
+  nldas_new_cube_plan:
+    command: create_cube_task_plan(nldas_new_cube_files, max_steps = I(100), skip_on_exists = TRUE)
+
+  "4_fetch_new_cubes_tasks.yml":
+    command: create_cube_task_makefile(target_name, nldas_new_cube_plan)
+
+  "4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind":
+    command: loop_tasks(
+      task_plan = nldas_new_cube_plan,
+      task_makefile = "4_fetch_new_cubes_tasks.yml")
+
+  "4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind":
+    command: NLDAS_hour2daily_tasks(target_name,
+      hash_fl = "4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind",
+      chunk_size = 5000,
+      out_dir = I('4_drivers_fetch/out'),
+      "4_drivers_fetch/src/NLDAS_daily_utils.R")
+
