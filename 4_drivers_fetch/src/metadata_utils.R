@@ -4,7 +4,6 @@ create_metadata_file <- function(outfile, site_cell_indices, lakes_sf_ind, obs_i
 
   lakes_sf <- sc_retrieve(lakes_sf_ind) %>% readRDS()
 
-  browser()
   obs_sites <- sc_retrieve(obs_ind_fl) %>% feather::read_feather() %>% pull(site_id) %>% unique()
 
 

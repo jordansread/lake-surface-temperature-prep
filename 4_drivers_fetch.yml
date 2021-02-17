@@ -25,7 +25,7 @@ targets:
       - 4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind
 
   replete_time_range:
-    command: c(t0=I(0), t1 = I(367700)) # for doing one timechunk: 24999
+    command: c(t0=I(0), t1 = I(369190)) # for doing one timechunk: 24999
 
   nccopy_time_stride:
     command: c(I(25000))
@@ -60,7 +60,7 @@ targets:
   # use 5_temperature_munge to determine observed TRUE/FALSE
   surface_lake_metadata_file.csv:
     command: create_metadata_file(target_name, site_cell_indices,
-      site_cell_indices = '1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind',
+      lakes_sf_ind = '1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind',
       obs_ind_fl = '5_temperature_munge/out/surface_lake_temp_daily.feather.ind',
       elevation_ind_fl = '2_crosswalk_munge/out/ned_centroid_elevations.csv.ind')
 
