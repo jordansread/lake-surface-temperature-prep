@@ -1,12 +1,13 @@
 version: 0.3.0
 name: 2_crosswalk_munge/out/centroid_lakes_sf.rds.ind
 type: file
-hash: 65b186f175e6af6a5c0b62aff30c1b3a
-time: 2021-02-01 11:17:10 UTC
+hash: 118af66a894b3a76d1f0f2a14b339d22
+time: 2021-02-15 19:31:20 UTC
 depends:
+  remove_ids: 92e287609ccf588cec6cf8562b96c689
   1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind: df25f66f74ae2006f4a42d3b7837211a
 fixed: 91e67d74cef33dce9e81b9209d4ce5d6
 code:
   functions:
-    centroid_sf_lakes: 31c95134e997fcfd53873753b1320317
+    centroid_sf_lakes: d7673aa263211390fbb349391e5e7121
 

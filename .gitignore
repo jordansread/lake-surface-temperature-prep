@@ -30,6 +30,25 @@ vignettes/*.pdf
 # knitr and R markdown default cache directories
 *_cache/
 /cache/
+.remake/
+.DS_Store
+*_tasks.yml
+
+# Data files
+*.rds
+*.Rds
+*.feather
+*.Feather
+*.csv
+*.shp
+*.shx
+*.dbf
+*.prj
+*.xml
+*.xlsx
+*.Rdata
+*.nc
+*_task_remakefile.yml
 
 # Temporary files created by R markdown
 *.utf8.md

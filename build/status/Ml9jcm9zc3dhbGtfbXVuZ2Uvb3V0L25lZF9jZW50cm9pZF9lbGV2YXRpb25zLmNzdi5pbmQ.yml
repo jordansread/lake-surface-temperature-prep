@@ -1,0 +1,13 @@
+version: 0.3.0
+name: 2_crosswalk_munge/out/ned_centroid_elevations.csv.ind
+type: file
+hash: 9dcba9db092d1e3c48e9361a2f0b6b2b
+time: 2021-02-15 23:56:07 UTC
+depends:
+  2_crosswalk_munge/out/centroid_lakes_sf.rds.ind: 118af66a894b3a76d1f0f2a14b339d22
+  2_crosswalk_munge/src/get_ned_buffers.R: abc48ecd2d6cdcd85071fc821d6f0fd4
+fixed: 453498756ff8a66a69d9197f92b13a5b
+code:
+  functions:
+    fetch_ned_points: e8f0a7d4b4f90f035e91e214b45631be
+

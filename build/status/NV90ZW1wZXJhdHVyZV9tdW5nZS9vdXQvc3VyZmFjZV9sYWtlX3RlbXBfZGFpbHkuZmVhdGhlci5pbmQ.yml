@@ -1,0 +1,15 @@
+version: 0.3.0
+name: 5_temperature_munge/out/surface_lake_temp_daily.feather.ind
+type: file
+hash: 4a38b7284cf33f7e4aab8d1b8801d483
+time: 2021-02-15 20:50:34 UTC
+depends:
+  5_temperature_munge/out/temp_wqp_munged.feather.ind: 64c3b59da0e125d70ba9dcc9e6b48d11
+  5_temperature_munge/in/merged_temp_data_daily.feather.ind: dec0e1c4f5b8b6094604a6ddeceb9fab
+  site_cell_indices: 64b37f11c1f78a463ae82200b381e55d
+  remove_ids: 92e287609ccf588cec6cf8562b96c689
+fixed: 18c637a980216d50f9b24b819a866d07
+code:
+  functions:
+    combine_temp_sources: 8eff91dee99b74be86d944e17dde7e98
+

@@ -22,12 +22,10 @@ sources:
 targets:
   4_drivers_fetch:
     depends:
-      #- 4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind
-      #- 4_drivers_fetch/log/4_fetch_new_cell_tasks.ind
       - 4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind
 
   replete_time_range:
-    command: c(t0=I(0), t1 = I(367700)) # for doing one timechunk: 24999
+    command: c(t0=I(0), t1 = I(369190)) # for doing one timechunk: 24999
 
   nccopy_time_stride:
     command: c(I(25000))
@@ -38,14 +36,6 @@ targets:
   cube_ind_dir:
     command: c(I("4_drivers_fetch/log/nc"))
 
-  rods_data_dir:
-    command: c(I("/Volumes/ThunderBlade/NLDAS_datarods/"))
-
-  cell_data_dir:
-    command: c(I("/Volumes/ThunderBlade/NLDAS_feather/"))
-
-  cell_ind_dir:
-    command: c(I("4_drivers_fetch/log/feather"))
 
   NLDAS_grid: # info from OPeNDAP: https://hydro1.gesdisc.eosdis.nasa.gov/dods/NLDAS_FORA0125_H.002
     command: create_ldas_grid(x0 = I(-124.9375), y0 = I(25.0625), x_num = I(464), y_num = I(224), cell_res = I(0.125))
@@ -60,22 +50,19 @@ targets:
   feature_centroids:
     command: fetch_read_centroids("2_crosswalk_munge/out/centroid_lakes_sf.rds.ind")
 
-  wqp_centroids:
-    command: filter_centroids_wqp(feature_centroids,
-      wqp_ind = '2_crosswalk_munge/out/wqptemp_nhdhr_xwalk.rds.ind')
-
   # dropped_sites <- wqp_site_cell_indices %>% mutate(datarod_fl = sprintf("/Volumes/ThunderBlade/NLDAS_datarods/NLDAS_DLWRFsfc_19790102-20210102_x[%s]_y[%s].txt", x, y), fl_size = file.size(datarod_fl)) %>% filter(fl_size < 600) %>% pull(site_id)
   feature_NLDAS_cells:
     command: cells_containing_points(NLDAS_grid, feature_centroids)
 
-  wqp_feature_NLDAS_cells:
-    command: cells_containing_points(NLDAS_grid, wqp_centroids)
+  site_cell_indices:
+    command: feature_cell_indices(NLDAS_grid, feature_centroids)
 
-  wqp_site_cell_indices:
-    command: feature_cell_indices(NLDAS_grid, wqp_centroids)
-
+  # use 5_temperature_munge to determine observed TRUE/FALSE
   surface_lake_metadata_file.csv:
-    command: create_metadata_file(target_name, wqp_site_cell_indices, '1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind', '5_temperature_munge/out/temp_wqp_munged.feather')
+    command: create_metadata_file(target_name, site_cell_indices,
+      lakes_sf_ind = '1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind',
+      obs_ind_fl = '5_temperature_munge/out/surface_lake_temp_daily.feather.ind',
+      elevation_ind_fl = '2_crosswalk_munge/out/ned_centroid_elevations.csv.ind')
 
   nldas_cells:
     command: as_OPeNDAP_cells(feature_NLDAS_cells, variables=I(c('tmp2m', 'dlwrfsfc','dswrfsfc','vgrd10m','ugrd10m')))

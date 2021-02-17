@@ -22,5 +22,17 @@ targets:
   2_crosswalk_munge/out/centroid_lakes_sf.rds:
     command: gd_get('2_crosswalk_munge/out/centroid_lakes_sf.rds.ind')
 
+  2_crosswalk_munge/out/ned_centroid_elevations.csv:
+    command: gd_get('2_crosswalk_munge/out/ned_centroid_elevations.csv.ind')
+
   3_wqp_fetch/out/wqp_temperature_data.rds:
     command: gd_get('3_wqp_fetch/out/wqp_temperature_data.rds.ind')
+
+  5_temperature_munge/out/temp_wqp_munged.feather:
+    command: gd_get('5_temperature_munge/out/temp_wqp_munged.feather.ind')
+
+  5_temperature_munge/in/merged_temp_data_daily.feather:
+    command: gd_get('5_temperature_munge/in/merged_temp_data_daily.feather.ind')
+
+  5_temperature_munge/out/surface_lake_temp_daily.feather:
+    command: gd_get('5_temperature_munge/out/surface_lake_temp_daily.feather.ind')
