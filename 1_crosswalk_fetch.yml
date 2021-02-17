@@ -13,6 +13,7 @@ packages:
 sources:
   - 1_crosswalk_fetch/src/fetch_nhdhr.R
   - 1_crosswalk_fetch/src/fetch_wqp_sites.R
+  - 1_crosswalk_fetch/src/file_utils.R
 
 targets:
   1_crosswalk_fetch:
@@ -47,8 +48,11 @@ targets:
   1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind:
     command: loop_tasks(nhd_HR_download_plan, '1_crosswalk_fetch_nhd_tasks.yml')
 
+  # LOCKED THIS IN!!!
   1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds.ind:
     command: fetch_wqp_sites(target_name, characteristicName = wqp_temperature_charnames,
       sf_ind = '1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind',
       box_res = 5, dummy = I('2021-01-13'),
       '1_crosswalk_fetch/src/fetch_wqp_sites.R')
+
+

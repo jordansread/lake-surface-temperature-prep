@@ -5,15 +5,16 @@ include:
   - 2_crosswalk_munge.yml
   - 3_wqp_fetch.yml
   - 4_drivers_fetch.yml
+  - 5_temperature_munge.yml
 
 targets:
   everything:
     depends:
       - 1_crosswalk_fetch
-      - 3_wqp_fetch
-      - 4_drivers_fetch/out/NLDAS_TMP2m_19790102-20210102_train_test.nc.ind
-      - 4_drivers_fetch/out/NLDAS_DLWRFsfc_19790102-20210102_train_test.nc.ind
-      - 4_drivers_fetch/out/NLDAS_DSWRFsfc_19790102-20210102_train_test.nc.ind
+      - 4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind
+      - 5_temperature_munge/out/surface_lake_temp_daily.feather.ind
+      - 2_crosswalk_munge/out/centroid_lakes_sf.rds.ind
+      - surface_lake_metadata_file.csv
 
 
 

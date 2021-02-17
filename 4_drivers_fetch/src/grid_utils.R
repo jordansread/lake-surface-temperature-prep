@@ -28,9 +28,9 @@ fetch_read_centroids <- function(indfile){
   readRDS(sc_retrieve(indfile))
 }
 
-filter_centroids_wqp <- function(centroids, wqp_ind){
-  wqp_site_ids <- sc_retrieve(wqp_ind) %>% readRDS() %>% pull(site_id)
-  centroids %>% filter(site_id %in% wqp_site_ids)
+filter_observed_centroids <- function(centroids, temperature_ind){
+  site_ids <- sc_retrieve(temperature_ind) %>% feather::read_feather() %>% pull(site_id)
+  centroids %>% filter(site_id %in% site_ids)
 }
 
 #' get the x and y indices of cells that contain points
@@ -50,15 +50,26 @@ cells_containing_points <- function(cell_grid, points){
 
 feature_cell_indices <- function(cell_grid, points){
 
+  chunk_size <- 1000
   # filter points that are outside of the grid
   within_grid <- st_within(points, cell_grid) %>% lengths() %>% {. > 0}
   points <- points[within_grid, ]
+  n_points <- nrow(points)
 
-  dplyr::do(points, data.frame(match_collection = st_intersects(cell_grid, st_geometry(.), sparse = FALSE))) %>%
-    mutate_all(which) %>% summarise_all(unique) %>%
-    tidyr::gather(key = cent_idx, value = grid_idx) %>%
-    mutate(x = cell_grid[grid_idx,]$x, y = cell_grid[grid_idx,]$y) %>%
-    mutate(site_id = points$site_id) %>% select(site_id, x, y)
+  chunk_start <- seq(1, to = n_points, by = chunk_size)
+  chunk_stop <- c(tail(chunk_start, -1L) - 1, n_points)
+
+  out_data <- tibble(site_id = rep(NA_character_, n_points),
+                     x = rep(NA_integer_, n_points),
+                     y = rep(NA_integer_, n_points))
+  for (chnk_i in 1:length(chunk_start)){
+    out_data[chunk_start[chnk_i]:chunk_stop[chnk_i], ] <- dplyr::do(points[chunk_start[chnk_i]:chunk_stop[chnk_i], ], data.frame(match_collection = st_intersects(cell_grid, st_geometry(.), sparse = FALSE))) %>%
+      mutate_all(which) %>% summarise_all(unique) %>%
+      tidyr::gather(key = cent_idx, value = grid_idx) %>%
+      mutate(x = cell_grid[grid_idx,]$x, y = cell_grid[grid_idx,]$y) %>%
+      mutate(site_id = points[chunk_start[chnk_i]:chunk_stop[chnk_i], ]$site_id) %>% select(site_id, x, y)
+  }
+  return(out_data)
 }
 
 cells_containing_points_within <- function(cell_grid, points, x_range, y_range){
