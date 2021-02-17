@@ -48,6 +48,7 @@ vignettes/*.pdf
 *.xlsx
 *.Rdata
 *.nc
+*_task_remakefile.yml
 
 # Temporary files created by R markdown
 *.utf8.md
