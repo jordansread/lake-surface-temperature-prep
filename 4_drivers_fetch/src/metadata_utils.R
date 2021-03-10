@@ -16,7 +16,7 @@ create_metadata_file <- function(outfile, site_cell_indices, lakes_sf_ind, obs_i
     # can't do coords on polygons, so convert to centroids
     st_centroid() %>% mutate(lon = {st_coordinates(Shape)[,1]}, lat = {st_coordinates(Shape)[,2]}) %>%
     st_drop_geometry() %>%
-    select(-Elevation) %>%
+    select(-Elevation, -FType, -FCode) %>%
     inner_join(elevations, by = 'site_id') %>%
     write_csv(outfile)
 
