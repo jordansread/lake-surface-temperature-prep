@@ -26,7 +26,8 @@ targets:
     command: c(I(c("nhdhr_{0BB28A37-D665-4735-A2DA-5C08014F9EEF}","nhdhr_{D93A3048-2CD8-4E81-9E4D-44A949E98BBB}",
       "nhdhr_{B97B71EB-32C0-48A1-804B-10EC7973FA2A}", "nhdhr_{35332563-13A5-4732-984B-9AE09BC72F00}", "nhdhr_156590089",
       "nhdhr_{E5735E0B-08B3-4AB3-A7F7-0552DC39D477}", "nhdhr_{48698991-B44C-4C9E-9C1D-87D63E2EDAE4}",
-      "nhdhr_{34E8DF18-8069-44E5-BC98-1436D2933A3D}", "nhdhr_152712037", "nhdhr_{07E47584-B347-4C1B-BA24-878E82FA5975}")))
+      "nhdhr_{34E8DF18-8069-44E5-BC98-1436D2933A3D}", "nhdhr_152712037", "nhdhr_{07E47584-B347-4C1B-BA24-878E82FA5975}",
+      "nhdhr_{ef5a02dc-f608-4740-ab0e-de374bf6471c}","nhdhr_136665792", "nhdhr_136686179")))
 
   2_crosswalk_munge/out/centroid_lakes_sf.rds.ind:
     command: centroid_sf_lakes(
