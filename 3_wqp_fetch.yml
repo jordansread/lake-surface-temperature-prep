@@ -20,5 +20,5 @@ targets:
   3_wqp_fetch/out/wqp_temperature_data.rds.ind:
     command: fetch_wqp_data(target_name, characteristicName = wqp_temperature_charnames,
       site_ind = '2_crosswalk_munge/out/wqptemp_nhdhr_xwalk.rds.ind',
-      dummy = I('2021-03-18'),
+      dummy = I('2021-04-05'),
      '3_wqp_fetch/src/fetch_wqp_data.R')

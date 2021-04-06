@@ -1,13 +1,13 @@
 version: 0.3.0
 name: 1_crosswalk_fetch/out/wqp_lake_temperature_sites_sf.rds.ind
 type: file
-hash: 31b1ee72c2025b0c8874d6a4dd5ddaf3
-time: 2021-03-19 01:03:37 UTC
+hash: ec083dfe96d9cc820925bd6e722b9a17
+time: 2021-04-05 16:23:15 UTC
 depends:
   wqp_temperature_charnames: bb20e88bd4d46ed2cf9d1d1471da69a7
   1_crosswalk_fetch/out/canonical_lakes_sf.rds.ind: df25f66f74ae2006f4a42d3b7837211a
   1_crosswalk_fetch/src/fetch_wqp_sites.R: 1e5f120083e14a8228ffdff1cec48e92
-fixed: 7cf6dccf6556e2b221aab0a37161b2d6
+fixed: 77d22d408a511cbf6ed6e353a9aa840e
 code:
   functions:
     fetch_wqp_sites: b29d7e8c281d8081bae5394446dc7085
