@@ -25,7 +25,7 @@ targets:
       - 4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind
 
   replete_time_range:
-    command: c(t0=I(0), t1 = I(369190)) # for doing one timechunk: 24999
+    command: c(t0=I(0), t1 = I(371038)) # for doing one timechunk: 24999
 
   nccopy_time_stride:
     command: c(I(25000))
@@ -65,7 +65,7 @@ targets:
       elevation_ind_fl = '2_crosswalk_munge/out/ned_centroid_elevations.csv.ind')
 
   nldas_cells:
-    command: as_OPeNDAP_cells(feature_NLDAS_cells, variables=I(c('tmp2m', 'dlwrfsfc','dswrfsfc','vgrd10m','ugrd10m')))
+    command: as_OPeNDAP_cells(feature_NLDAS_cells, variables=I(c('tmp2m', 'dlwrfsfc','dswrfsfc','vgrd10m','ugrd10m','apcpsfc','pressfc','spfh2m')))
 
   nldas_empty_box: # this is the domain that will require a FULL data pull in the time dimension
     command: nldas_diff_box(nldas_cells, '4_drivers_fetch/in/nldas_cells.rds')
