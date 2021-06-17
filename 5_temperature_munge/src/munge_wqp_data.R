@@ -28,7 +28,7 @@ munge_wqp_temperature <- function(outind, wqp_ind, wqp_crosswalk_ind){
     summarize(act.n = sum(!is.na(`ActivityDepthHeightMeasure/MeasureValue`)), res.n=sum(!is.na((`ResultDepthHeightMeasure/MeasureValue`)))) %>%
     mutate(use.depth.code = ifelse(act.n>res.n, 'act','res')) %>%
     dplyr::select(OrganizationIdentifier, use.depth.code)
-
+  
   left_join(wqp_temp_data, activity.sites, by='OrganizationIdentifier') %>%
     mutate(raw.depth = case_when(
       use.depth.code == 'act' ~ `ActivityDepthHeightMeasure/MeasureValue`,
@@ -50,10 +50,11 @@ munge_wqp_temperature <- function(outind, wqp_ind, wqp_crosswalk_ind){
     mutate(wtemp = convert * (raw_value + offset), depth = raw.depth * depth.convert, doy = lubridate::yday(Date)) %>%
     filter(!is.na(wtemp), !is.na(depth), wtemp <= max_temp, wtemp >= min_temp, depth <= max_depth, !result_method %in% c('LAB TEMP','LAB'),
            !(doy %in% zero_doy[1]:zero_doy[2] & wtemp ==0)) %>%
-    dplyr::select(Date, time, timezone, MonitoringLocationIdentifier, depth, wtemp) %>%
-    inner_join(dplyr::select(wqp2nhd, site_id, MonitoringLocationIdentifier)) %>%
-    filter(depth <= 1) %>%
-    group_by(Date, site_id) %>% summarise(wtemp = mean(wtemp, na.rm = TRUE)) %>%
+    dplyr::select(Date, time, timezone, source = MonitoringLocationIdentifier, depth, wtemp) %>%
+    inner_join(dplyr::select(wqp2nhd, site_id, source = MonitoringLocationIdentifier)) %>%
+    filter(depth <= 1, !is.na(wtemp)) %>%
+    group_by(Date, site_id) %>% summarise(wtemp = first(wtemp), source = first(source), 
+                                          .groups = 'drop') %>%
     filter(Date > as.Date('1979-01-01')) %>%
     feather::write_feather(outfile)
   gd_put(outind, outfile)
@@ -62,16 +63,23 @@ munge_wqp_temperature <- function(outind, wqp_ind, wqp_crosswalk_ind){
 
 combine_temp_sources <- function(outind, wqp_daily_ind, superset_daily_ind, cell_sites, remove_ids){
 
-
+  
   outfile <- as_data_file(outind)
   wqp_daily <- sc_retrieve(wqp_daily_ind) %>% read_feather()
-  superset_daily <- sc_retrieve(superset_daily_ind) %>% read_feather() %>% select(site_id, Date = date, depth, temp) %>%
-    filter(depth <= 1) %>% group_by(Date, site_id) %>% summarise(wtemp = mean(temp, na.rm = TRUE), .groups = 'drop')
-
+  superset_daily <- sc_retrieve(superset_daily_ind) %>% read_feather() %>% 
+    mutate(source = basename(source)) %>% select(site_id, Date = date, depth, temp, source) %>%
+    filter(depth <= 1) %>% group_by(Date, site_id) %>% 
+    summarise(wtemp = first(temp), source = first(source), 
+              .groups = 'drop')
   new_data <- anti_join(superset_daily, wqp_daily, by = c('site_id', 'Date'))
+  
   bind_rows(wqp_daily, new_data) %>% arrange(site_id) %>%
     filter(!site_id %in% remove_ids) %>%
     filter(site_id %in% cell_sites$site_id) %>%
+    filter(Date < as.Date('2021-01-01'), Date > as.Date('1979-12-31')) %>% 
+    group_by(Date, site_id) %>% 
+    summarise(wtemp = first(wtemp), source = first(source), 
+              .groups = 'drop') %>% 
     write_feather(path = outfile)
 
 
