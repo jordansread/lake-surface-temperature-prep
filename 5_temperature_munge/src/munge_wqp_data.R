@@ -44,15 +44,13 @@ munge_wqp_temperature <- function(outind, wqp_ind, wqp_crosswalk_ind){
            result_method = `ResultAnalyticalMethod/MethodIdentifier`,
            timezone = `ActivityStartTime/TimeZoneCode`) %>%
     mutate(time = substr(`ActivityStartTime/Time`, 0, 5)) %>%
-    dplyr::select(Date, time, timezone, raw_value, units, raw.depth, depth.units, MonitoringLocationIdentifier, result_method) %>%
+    dplyr::select(Date, time, timezone, raw_value, units, raw.depth, depth.units, MonitoringLocationIdentifier, result_method, CharacteristicName) %>%
     left_join(var_unit_map, by='units') %>%
     left_join(depth_unit_map, by='depth.units') %>%
     mutate(wtemp = convert * (raw_value + offset), depth = raw.depth * depth.convert, doy = lubridate::yday(Date)) %>%
     filter(!is.na(wtemp), !is.na(depth), wtemp <= max_temp, wtemp >= min_temp, depth <= max_depth, !result_method %in% c('LAB TEMP','LAB'),
            !(doy %in% zero_doy[1]:zero_doy[2] & wtemp ==0)) %>%
-    # as of June 2021, sites with "IL_EPA_WQX-" and "IL_EPA-" have a mix of lab and field data with no real way to tell. 
-    # the field data seems to be mostly low temperature ints (0,1,2,3,4,5,6), but there are some other bad values too that aren't ints
-    filter(!is_bad_IL_EPA(.)) %>% 
+    filter(!custom_wqx_qaqc(.)) %>% 
     dplyr::select(Date, time, timezone, source = MonitoringLocationIdentifier, depth, wtemp) %>%
     inner_join(dplyr::select(wqp2nhd, site_id, source = MonitoringLocationIdentifier)) %>%
     filter(depth <= 1, !is.na(wtemp)) %>%
@@ -65,11 +63,12 @@ munge_wqp_temperature <- function(outind, wqp_ind, wqp_crosswalk_ind){
 
 #' there is a mix of bad and good data from IL EPA. The bad data seem to be of lower precision, 
 #' which is what we're filtering out here
-
-is_bad_IL_EPA <- function(df){
+# as of June 2021, sites with "IL_EPA_WQX-" and "IL_EPA-" have a mix of lab and field data with no real way to tell. 
+# the field data seems to be mostly low temperature ints (0,1,2,3,4,5,6), but there are some other bad values too that aren't ints
+#' as of June 22, email from Jonathan Burian EPA Region 5 says that 'Temperature, sample' is reliably something we can filter on
+custom_wqx_qaqc <- function(df){
   mutate(df, bad_flag = case_when(
-    grepl('IL_EPA', MonitoringLocationIdentifier) & raw_value >= 8 & raw_value < 16 ~ raw_value %% 1 == 0,
-    grepl('IL_EPA', MonitoringLocationIdentifier) & raw_value < 8 ~ (raw_value*10) %% 1 == 0,
+    grepl('IL_EPA', MonitoringLocationIdentifier) & CharacteristicName == 'Temperature, sample' ~ TRUE,
     TRUE ~ FALSE
   )) %>% pull(bad_flag)
 }
