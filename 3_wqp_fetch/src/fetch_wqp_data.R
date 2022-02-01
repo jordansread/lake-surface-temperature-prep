@@ -26,7 +26,7 @@ fetch_wqp_data <- function(out_ind, characteristicName, site_ind, dummy, ..., ma
     arrange(desc(resultCount)) %>%
     mutate(task_num = MESS::cumsumbinning(x = resultCount, threshold = max_results, maxgroupsize = max_sites),
            task_name = paste0("pull_", task_num),
-           pull_org = FALSE)
+           pull_org = FALSE) 
 
   # now create partitions for the organizations for the 'bad' ids, and append but make MonitoringLocationIdentifier NA
   wqp_site_table <- filter(wqp_sites, MonitoringLocationIdentifier %in% bad_sites) %>% group_by(OrganizationIdentifier) %>%
