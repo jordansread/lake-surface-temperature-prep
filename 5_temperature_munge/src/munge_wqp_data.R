@@ -39,15 +39,13 @@ munge_wqp_temperature <- function(outind, wqp_ind, wqp_crosswalk_ind){
       use.depth.code == 'act' ~ `ActivityDepthHeightMeasure/MeasureUnitCode`,
       use.depth.code == 'res' ~ `ResultDepthHeightMeasure/MeasureUnitCode`
     )) %>%
-    # "Temp at lab-iced." "Temp. at lab" "Temperature at lab" clearly need to be removed 
-    # !grepl(pattern="(Temp at lab|Temp. at lab|Temperature at lab)", ResultCommentText
     rename(Date = ActivityStartDate,
            raw_value = ResultMeasureValue,
            units = `ResultMeasure/MeasureUnitCode`,
            result_method = `ResultAnalyticalMethod/MethodIdentifier`,
            timezone = `ActivityStartTime/TimeZoneCode`) %>%
     mutate(time = substr(`ActivityStartTime/Time`, 0, 5)) %>%
-    # remove bad data from labs:
+  	# "Temp at lab-iced." "Temp. at lab" "Temperature at lab" clearly need to be removed 
     filter(!grepl(pattern="(Temp at lab|Temp. at lab|Temperature at lab)", ResultCommentText)) %>% 
     dplyr::select(Date, time, timezone, raw_value, units, raw.depth, depth.units, MonitoringLocationIdentifier, result_method, CharacteristicName) %>%
     left_join(var_unit_map, by='units') %>%
