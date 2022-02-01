@@ -29,7 +29,7 @@ munge_wqp_temperature <- function(outind, wqp_ind, wqp_crosswalk_ind){
     mutate(use.depth.code = ifelse(act.n>res.n, 'act','res')) %>%
     dplyr::select(OrganizationIdentifier, use.depth.code)
 
-  browser()
+  
   left_join(wqp_temp_data, activity.sites, by='OrganizationIdentifier') %>%
     mutate(raw.depth = case_when(
       use.depth.code == 'act' ~ `ActivityDepthHeightMeasure/MeasureValue`,
@@ -102,7 +102,7 @@ combine_temp_sources <- function(outind, wqp_daily_ind, superset_daily_ind, cell
   remove_sources <- c('South_Center_DO_2018_09_11_All.rds', 'Carlos_DO_2018_11_05_All.rds', 'Greenwood_DO_2018_09_14_All.rds')
   outfile <- as_data_file(outind)
   wqp_daily <- sc_retrieve(wqp_daily_ind) %>% read_feather()
-  browser()
+  
   superset_daily <- sc_retrieve(superset_daily_ind) %>% read_feather() %>% 
     # remove WQP sources since we want the fresh updates for those and these IDs won't join correctly
     filter(!grepl('wqp_', source)) %>% 
