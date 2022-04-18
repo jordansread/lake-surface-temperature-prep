@@ -12,7 +12,8 @@
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[275000.299999]_x[1.463]_y[0.204]_var[apcpsfc].nc: bc927cc2234f49fa640694d85f347d34
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[300000.324999]_x[1.463]_y[0.204]_var[apcpsfc].nc: 9dc69b76d9817e4e65afea0fcb719232
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[325000.349999]_x[1.463]_y[0.204]_var[apcpsfc].nc: 03da9396df2515f1cb23eac5420bd8cd
-/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.371038]_x[1.463]_y[0.204]_var[apcpsfc].nc: 279dc439f32304c0f28f8c71c8f618ac
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.374999]_x[1.463]_y[0.204]_var[apcpsfc].nc: 705b147d931b6def7263e63415de9a6d
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[375000.379366]_x[1.463]_y[0.204]_var[apcpsfc].nc: b03469b7ecc4d5829783233989ad207a
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[000000.024999]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: 3d0f950c6df542ea0f607ee32fc5f06c
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[025000.049999]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: aaf4af359bab5db2fb778919c83603fb
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[050000.074999]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: 1dcc90a4d3011d5173e8b2420e48d109
@@ -27,7 +28,8 @@
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[275000.299999]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: bd6e7c31ab3c9725dc6ddc351f0e168f
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[300000.324999]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: c1b2096349f2133526b0d978d3313cb8
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[325000.349999]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: 0c0bfc94fd1f4fc40e7aa74585eab08a
-/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.371038]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: 5b3e6a565f302c56ed178f68d0010c7a
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.374999]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: 477a797b90ece7b4f34936ff475a1023
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[375000.379366]_x[1.463]_y[0.204]_var[dlwrfsfc].nc: 7127809a282505296a62646002831d1b
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[000000.024999]_x[1.463]_y[0.204]_var[dswrfsfc].nc: dc6ffa593998643e9ee43ad9aed366c2
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[025000.049999]_x[1.463]_y[0.204]_var[dswrfsfc].nc: dc2f5c3fd4696ee820d7a90ed001c402
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[050000.074999]_x[1.463]_y[0.204]_var[dswrfsfc].nc: e2e1f34968b7f5c04c3ca658da002c58
@@ -42,7 +44,8 @@
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[275000.299999]_x[1.463]_y[0.204]_var[dswrfsfc].nc: 5f46541bab81c00916e835401ddcbe80
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[300000.324999]_x[1.463]_y[0.204]_var[dswrfsfc].nc: 2d7d8af86bcb730f767ff976f887de37
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[325000.349999]_x[1.463]_y[0.204]_var[dswrfsfc].nc: 5a48dbe9a140260fc0e256602a3908c7
-/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.371038]_x[1.463]_y[0.204]_var[dswrfsfc].nc: f4b913c7a0f887220f38c863b3d6fb1d
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.374999]_x[1.463]_y[0.204]_var[dswrfsfc].nc: 4ca148b7d8e69f280afad4b6527ea20a
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[375000.379366]_x[1.463]_y[0.204]_var[dswrfsfc].nc: 6821653ed5ff27386fe1ae933cc886e5
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[000000.024999]_x[1.463]_y[0.204]_var[pressfc].nc: 47fe5b1f4b86c7b9615a72b7924dfb36
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[025000.049999]_x[1.463]_y[0.204]_var[pressfc].nc: e572d11e9db2ab82a2b390da82e306c0
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[050000.074999]_x[1.463]_y[0.204]_var[pressfc].nc: 1724247994d42675cc8886f39ef6ca0a
@@ -57,7 +60,8 @@
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[275000.299999]_x[1.463]_y[0.204]_var[pressfc].nc: e1832530daaa0063c59e36c258d5cbed
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[300000.324999]_x[1.463]_y[0.204]_var[pressfc].nc: c050e59ff76df3885a1804bc1cb4dfa2
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[325000.349999]_x[1.463]_y[0.204]_var[pressfc].nc: 7c4387b1b4ccb91ba5c57217e347aa67
-/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.371038]_x[1.463]_y[0.204]_var[pressfc].nc: dfcd2b8b25a24380257f08eb889c9045
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.374999]_x[1.463]_y[0.204]_var[pressfc].nc: f2ddf8643b5c7f2792ccbc798bd75aee
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[375000.379366]_x[1.463]_y[0.204]_var[pressfc].nc: 354adb9d8e32ce0c96cb8300bf0bd946
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[000000.024999]_x[1.463]_y[0.204]_var[spfh2m].nc: 4bff8ff5443f7a30cad8730fd730fedb
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[025000.049999]_x[1.463]_y[0.204]_var[spfh2m].nc: b05261bbe78bacfc591a56e4d63190f8
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[050000.074999]_x[1.463]_y[0.204]_var[spfh2m].nc: c9c2ff98ac8639ea33b4b71156b1591e
@@ -72,7 +76,8 @@
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[275000.299999]_x[1.463]_y[0.204]_var[spfh2m].nc: b5ca09fa1b1e8d89efdb3ea798610061
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[300000.324999]_x[1.463]_y[0.204]_var[spfh2m].nc: b7845974c1b868f9c717f8e842991950
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[325000.349999]_x[1.463]_y[0.204]_var[spfh2m].nc: 1174cd261e8b6fe0a9b144d9f5a99979
-/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.371038]_x[1.463]_y[0.204]_var[spfh2m].nc: de19da4ec8b56fd954ca42ad8b43c1e1
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.374999]_x[1.463]_y[0.204]_var[spfh2m].nc: 26aa446c0269287948cb8027fb01d029
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[375000.379366]_x[1.463]_y[0.204]_var[spfh2m].nc: 43d282afbb2fd1274277ecd71624123c
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[000000.024999]_x[1.463]_y[0.204]_var[tmp2m].nc: 5d09672a48583dfb70580bf619b8178a
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[025000.049999]_x[1.463]_y[0.204]_var[tmp2m].nc: 654ad55fb873b96e8cfebc643b6b23c5
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[050000.074999]_x[1.463]_y[0.204]_var[tmp2m].nc: 246a7aa9222e36c64fe00385630f9f30
@@ -87,7 +92,8 @@
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[275000.299999]_x[1.463]_y[0.204]_var[tmp2m].nc: a3f618636e540fd154ebacd991a99024
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[300000.324999]_x[1.463]_y[0.204]_var[tmp2m].nc: 43e62b607e674d27fbe5b579c5ffadf0
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[325000.349999]_x[1.463]_y[0.204]_var[tmp2m].nc: 0021b46f1e62c5e4acab0564848ddb2b
-/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.371038]_x[1.463]_y[0.204]_var[tmp2m].nc: 5ca62a1cecd92266de23b5d8759a408e
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.374999]_x[1.463]_y[0.204]_var[tmp2m].nc: e5063fae7cf151d63b92e8f9efa9f700
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[375000.379366]_x[1.463]_y[0.204]_var[tmp2m].nc: 91cdc812ef99b9e2bb53baf8d2baaee9
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[000000.024999]_x[1.463]_y[0.204]_var[ugrd10m].nc: 028f07cb5324928f216a7ab49cd58761
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[025000.049999]_x[1.463]_y[0.204]_var[ugrd10m].nc: 1e98e461990ec8762f00f7befbc7fbdd
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[050000.074999]_x[1.463]_y[0.204]_var[ugrd10m].nc: 0f5dc813de37820e7e373a3b4e20ede7
@@ -102,7 +108,8 @@
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[275000.299999]_x[1.463]_y[0.204]_var[ugrd10m].nc: 57c2c34851edc8b5bf83d24faea2aefd
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[300000.324999]_x[1.463]_y[0.204]_var[ugrd10m].nc: 3955425f0c9f1424955891ab24df13bf
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[325000.349999]_x[1.463]_y[0.204]_var[ugrd10m].nc: 5ee767bf8b5409925a572b8fc3aa7e85
-/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.371038]_x[1.463]_y[0.204]_var[ugrd10m].nc: 65f0a8320b9a5d4d551a4cd494eb6837
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.374999]_x[1.463]_y[0.204]_var[ugrd10m].nc: b23fb5b30ed627d106fb8320e38b2e12
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[375000.379366]_x[1.463]_y[0.204]_var[ugrd10m].nc: efa77c6b3bdb96435bed9c5bf9bfd43a
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[000000.024999]_x[1.463]_y[0.204]_var[vgrd10m].nc: 7bdbce5ed30a232799c8a31e45c75181
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[025000.049999]_x[1.463]_y[0.204]_var[vgrd10m].nc: 9fe74c855a66e4171154d63354d876b7
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[050000.074999]_x[1.463]_y[0.204]_var[vgrd10m].nc: 21fea2df32a5a1bbcdcfc731312579d9
@@ -117,5 +124,6 @@
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[275000.299999]_x[1.463]_y[0.204]_var[vgrd10m].nc: 94414e814dfe3c7734f65e4d6c551450
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[300000.324999]_x[1.463]_y[0.204]_var[vgrd10m].nc: fbd24d89bcca9e3471f4ae236b6b6b4a
 /Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[325000.349999]_x[1.463]_y[0.204]_var[vgrd10m].nc: 36d25697c6b7b9ad9f33f5fb94304288
-/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.371038]_x[1.463]_y[0.204]_var[vgrd10m].nc: bd295b7c5560d7c4f4cb82baea8b2dc5
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[350000.374999]_x[1.463]_y[0.204]_var[vgrd10m].nc: 89888a1266dfbef55e0f7319eca661e6
+/Volumes/ThunderBlade/NLDAS_nc/NLDAS_time[375000.379366]_x[1.463]_y[0.204]_var[vgrd10m].nc: 344a8db5042969b97a8076337aca2b7f
 

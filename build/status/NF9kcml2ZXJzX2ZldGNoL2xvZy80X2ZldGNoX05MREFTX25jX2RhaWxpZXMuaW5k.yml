@@ -1,10 +1,10 @@
 version: 0.3.0
 name: 4_drivers_fetch/log/4_fetch_NLDAS_nc_dailies.ind
 type: file
-hash: 42c28592b74937e6c4c758b02df79547
-time: 2021-05-06 13:11:27 UTC
+hash: f88398255a13b137fa0237c8d2f4eb4e
+time: 2022-04-18 00:45:09 UTC
 depends:
-  4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind: ca60b8e3100e8d1dd19793662521c732
+  4_drivers_fetch/log/4_fetch_new_cubes_tasks.ind: e2e68810682cece195c326189663e312
   4_drivers_fetch/src/NLDAS_daily_utils.R: fc85d751d98be027159b0a38c36402aa
 fixed: fea21a71403a64560ced446bdc8568d2
 code:
