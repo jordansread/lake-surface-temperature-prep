@@ -65,8 +65,20 @@ reduce_hour2daily_nldas <- function(nc_file, hash_tbl, chunk_size){
 
   var_values <- ncvar_def(var, "unknown",  list(dim_x, dim_y, dim_t), -999)
 
+  daily_funs <- c(apcpsfc = mean_daily,
+  								dlwrfsfc = mean_daily,
+  								dswrfsfc = mean_daily,
+  								pressfc = mean_daily,
+  								spfh2m = mean_daily,
+  								tmp2m = mean_daily,
+  								ugrd10m = cubed_daily,
+  								vgrd10m = cubed_daily)
   mean_daily <- function(x){
     sum(x / 24)
+  }
+  
+  cubed_daily <- function(x){
+  	sum(x^3 / 24)
   }
 
   if (file.exists(nc_file)){
@@ -97,8 +109,9 @@ reduce_hour2daily_nldas <- function(nc_file, hash_tbl, chunk_size){
       # The index for the new file and dates needs to keep growing when we hit a new file:
       day_lead <- time_lead + this_chunk[["t_start"]]
       day_follow <- time_follow + this_chunk[["t_start"]]
+
       tmp_data <- ncvar_get(hourly_nc, varid = var, start = c(1, 1, time_lead), count = c(-1, -1, time_count)) %>%
-        slam::rollup(3L, INDEX = day_indx[day_lead:day_follow], mean_daily)
+        slam::rollup(3L, INDEX = day_indx[day_lead:day_follow], daily_funs[[var]])
 
 
       # start and finish of time
@@ -108,11 +121,24 @@ reduce_hour2daily_nldas <- function(nc_file, hash_tbl, chunk_size){
       overwrite_data <- ncvar_get(output_nc_file, varid = var, start = c(1, 1, nc_day_indx[1]), count = c(-1, -1, nc_day_indx[2] - nc_day_indx[1] + 1))
       ncvar_put(output_nc_file, varid = var, vals = overwrite_data + tmp_data, start= c(1, 1, nc_day_indx[1]), count = c(-1, -1, nc_day_indx[2] - nc_day_indx[1] + 1), verbose=FALSE)
       pb$tick()
+      rm(tmp_data)
       gc()
     }
+    
     nc_close(hourly_nc)
     # close each time so we can interrogate this as it grows
     nc_close(output_nc_file)
   }
-
+  # variables that use cubed daily need a cubed root applied:
+  if (var %in% c('ugrd10m', 'vgrd10m')){
+  	output_nc_file <- nc_open(nc_file, write=TRUE)
+  	raw_data <- ncvar_get(output_nc_file, varid = var, start = c(1, 1, 1), count = c(-1, -1, -1))
+  	message('taking the cube root of ', var)
+  	# apply cubed root to each individual daily value:
+  	cubed_data <- raw_data ^ (1/3)
+  	rm(raw_data)
+  	
+  	ncvar_put(output_nc_file, varid = var, vals = cubed_data, start = c(1,1,1), count = c(-1,-1,-1), verbose=FALSE)
+  	nc_close(output_nc_file)
+  }
 }
