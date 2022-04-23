@@ -65,14 +65,7 @@ reduce_hour2daily_nldas <- function(nc_file, hash_tbl, chunk_size){
 
   var_values <- ncvar_def(var, "unknown",  list(dim_x, dim_y, dim_t), -999)
 
-  daily_funs <- c(apcpsfc = mean_daily,
-  								dlwrfsfc = mean_daily,
-  								dswrfsfc = mean_daily,
-  								pressfc = mean_daily,
-  								spfh2m = mean_daily,
-  								tmp2m = mean_daily,
-  								ugrd10m = cubed_daily,
-  								vgrd10m = cubed_daily)
+
   mean_daily <- function(x){
     sum(x / 24)
   }
@@ -81,6 +74,14 @@ reduce_hour2daily_nldas <- function(nc_file, hash_tbl, chunk_size){
   	sum(x^3 / 24)
   }
 
+  daily_funs <- c(apcpsfc = mean_daily,
+  								dlwrfsfc = mean_daily,
+  								dswrfsfc = mean_daily,
+  								pressfc = mean_daily,
+  								spfh2m = mean_daily,
+  								tmp2m = mean_daily,
+  								ugrd10m = cubed_daily,
+  								vgrd10m = cubed_daily)
   if (file.exists(nc_file)){
     unlink(nc_file)
   }
@@ -134,10 +135,15 @@ reduce_hour2daily_nldas <- function(nc_file, hash_tbl, chunk_size){
   	output_nc_file <- nc_open(nc_file, write=TRUE)
   	raw_data <- ncvar_get(output_nc_file, varid = var, start = c(1, 1, 1), count = c(-1, -1, -1))
   	message('taking the cube root of ', var)
+  	is_neg_real <- raw_data < 0 & !is.na(raw_data)
+  	# make negative numbers positive:
+  	raw_data[is_neg_real] <- raw_data[is_neg_real] * (-1)
   	# apply cubed root to each individual daily value:
   	cubed_data <- raw_data ^ (1/3)
+  	# convert back to negative numbers
+  	cubed_data[is_neg_real] <- cubed_data[is_neg_real] * (-1)
   	rm(raw_data)
-  	
+  	rm(is_neg_real)
   	ncvar_put(output_nc_file, varid = var, vals = cubed_data, start = c(1,1,1), count = c(-1,-1,-1), verbose=FALSE)
   	nc_close(output_nc_file)
   }
